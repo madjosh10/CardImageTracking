@@ -17,6 +17,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var diamondNode: SCNNode?
     var cloverNode: SCNNode?
     var spadeNode: SCNNode?
+    var imageNodes = [SCNNode]()
+    var isJumping = false
+    
+    
     
     
     override func viewDidLoad() {
@@ -89,13 +93,52 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             guard let shape = shapeNode else { return nil }
             node.addChildNode(shape)
+            imageNodes.append(node)
+            
+            return node
  
             
         }
         
-        return node
+        return nil
         
     }
+    
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        if imageNodes.count == 2 {
+            let positionOne = SCNVector3ToGLKVector3(imageNodes[0].position)
+            let positionTwo = SCNVector3ToGLKVector3(imageNodes[1].position)
+            let distance = GLKVector3Distance(positionOne, positionTwo)
+            if distance < 0.10 {
+                spinJump(node: imageNodes[0])
+                spinJump(node: imageNodes[1])
+                isJumping = true
+                
+            } else {
+                isJumping = false
+            }
+            
+        }
+    }
+    
+    func spinJump(node: SCNNode) {
+        if isJumping { return }
+        
+        let shapeNode = node.childNodes[1]
+        let shapeSpin = SCNAction.rotateBy(x: 0, y: 2 * .pi, z: 0, duration: 1)
+        shapeSpin.timingMode = .easeInEaseOut
+        
+        let up = SCNAction.moveBy(x: 0, y: 0.03, z: 0, duration: 0.5)
+        up.timingMode = .easeInEaseOut
+        
+        let down = up.reversed()
+        let upDown = SCNAction.sequence([up, down])
+        
+        shapeNode.runAction(shapeSpin)
+        shapeNode.runAction(upDown)
+        
+    }
+    
 
     enum CardType: String {
         case KingOfDiamonds = "KingOfDiamonds"
