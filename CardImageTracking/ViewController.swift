@@ -69,11 +69,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             node.addChildNode(planeNode)
             
-            if let shapeNode = heartNode {
-                node.addChildNode(shapeNode)
+            var shapeNode : SCNNode?
+            switch imageAnchor.referenceImage.name {
+                case CardType.KingOfClover.rawValue :
+                    shapeNode = cloverNode
+                case CardType.KingOfHears.rawValue :
+                    shapeNode = heartNode
+                case CardType.KingOfSpades.rawValue :
+                    shapeNode = spadeNode
+                case CardType.KingOfDiamonds.rawValue :
+                    shapeNode = diamondNode
+                default:
+                    break
             }
             
+            let shapeSpin = SCNAction.rotateBy(x: 0, y: 2 * .pi, z: 0, duration: 10)
+            let repeatSpin = SCNAction.repeatForever(shapeSpin)
+            shapeNode?.runAction(repeatSpin)
             
+            guard let shape = shapeNode else { return nil }
+            node.addChildNode(shape)
+ 
             
         }
         
@@ -81,5 +97,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
     }
 
+    enum CardType: String {
+        case KingOfDiamonds = "KingOfDiamonds"
+        case KingOfSpades = "KingOfSpades"
+        case KingOfClover = "KingOfClover"
+        case KingOfHears = "KingOfHearts"
+    }
  
 } // end ViewController
