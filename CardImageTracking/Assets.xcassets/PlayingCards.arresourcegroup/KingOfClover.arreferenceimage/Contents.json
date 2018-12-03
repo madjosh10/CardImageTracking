@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "FullSizeRender-2.jpg"
+      "filename" : "FullSizeRender-9.jpg"
     }
   ],
   "info" : {
@@ -10,7 +10,6 @@
     "author" : "xcode"
   },
   "properties" : {
-    "width" : 2.5,
-    "unit" : "inches"
+    "width" : 2.5
   }
 }

@@ -13,11 +13,25 @@ import ARKit
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
+    var heartNode: SCNNode?
+    var diamondNode: SCNNode?
+    var cloverNode: SCNNode?
+    var spadeNode: SCNNode?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         sceneView.delegate = self
         sceneView.autoenablesDefaultLighting = true
+        let heartScene = SCNScene(named: "art.scnassets/heart.scn")
+        let spadeScene = SCNScene(named: "art.scnassets/spade.scn")
+        let cloverScene = SCNScene(named: "art.scnassets/clover.scn")
+        let diamondScene = SCNScene(named: "art.scnassets/diamond.scn")
+        
+        heartNode = heartScene?.rootNode
+        spadeNode = spadeScene?.rootNode
+        cloverNode = cloverScene?.rootNode
+        diamondNode = diamondScene?.rootNode
         
     }
     
@@ -25,9 +39,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.viewWillAppear(animated)
         let configuration = ARImageTrackingConfiguration()
         
-        if let trackingImages = ARReferenceImage.referenceImages(inGroupNamed: "PokemonCards", bundle: Bundle.main) {
+        if let trackingImages = ARReferenceImage.referenceImages(inGroupNamed: "PlayingCards", bundle: Bundle.main) {
             configuration.trackingImages = trackingImages
-            configuration.maximumNumberOfTrackedImages = 3
+            configuration.maximumNumberOfTrackedImages = 4
         }
         
         
@@ -54,6 +68,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             planeNode.eulerAngles.x = -.pi/2
             
             node.addChildNode(planeNode)
+            
+            if let shapeNode = heartNode {
+                node.addChildNode(shapeNode)
+            }
+            
+            
             
         }
         
